@@ -1,11 +1,12 @@
 # Sitequest MCP Server
 
-A remote [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server for managing VPS servers and domains on [Sitequest](https://site.quest). Lets AI assistants provision, monitor, and configure infrastructure through natural language.
+A remote [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server for managing VPS servers, webspaces, and domains on [Sitequest](https://site.quest). Lets AI assistants provision, monitor, and configure infrastructure through natural language.
 
 ## Features
 
 - **VPS Management** -- List, create, monitor, power control, OS reinstall, resize
-- **SSH & File Operations** -- Execute commands, read/write files, manage SSH security
+- **Webspace Hosting** -- Provision shared hosting, install CMS (WordPress, Joomla, TYPO3), link domains, manage PHP versions and databases
+- **SSH & File Operations** -- Execute commands, read/write files, manage SSH security on both VPS and webspaces (jailed)
 - **Firewall & Backups** -- Configure firewall rules, create/restore/delete backups
 - **Domain Management** -- Register, transfer, configure DNS records, WHOIS privacy, DNSSEC
 - **Billing Integration** -- Provision resources with automatic payment via saved mandate
@@ -124,6 +125,37 @@ See [examples/](examples/) for more client configurations.
 | `uncancel_vm` | `vps:provision` | Reactivate a cancelled VPS before expiry |
 | `upgrade_vm` | `vps:provision` | Upgrade resources with pro-rated charge (requires `confirm`) |
 
+### Webspaces
+
+Shared web hosting with isolated PHP/MariaDB sites. SFTP and exec tools operate as the unprivileged site Linux user, jailed to the site's home directory -- they cannot affect other sites on the same node.
+
+| Tool | Scope | Description |
+|------|-------|-------------|
+| `webspace_list` | `webspace:read` | List all webspaces with status, plan, CMS, and quota usage |
+| `webspace_get` | `webspace:read` | Detailed webspace info including linked domains and live disk usage |
+| `webspace_get_ssh_info` | `webspace:read` | SSH connection details (host, port, username, host key fingerprint) |
+| `webspace_list_ssh_keys` | `webspace:read` | List SSH public keys in `authorized_keys` |
+| `webspace_create` | `webspace:provision` | Provision a paid webspace (charges saved mandate) |
+| `webspace_claim_free` | `webspace:provision` | Claim the one-shot free-tier webspace for the account |
+| `webspace_upgrade` | `webspace:provision` | Increase disk and/or database count (no downgrades) |
+| `webspace_delete` | `webspace:provision` | Delete a webspace permanently (requires `confirm`) |
+| `webspace_set_label` | `webspace:manage` | Update the display name |
+| `webspace_set_php` | `webspace:manage` | Change PHP version (8.1 -- 8.5, requires `confirm`) |
+| `webspace_install_cms` | `webspace:manage` | Install/reinstall WordPress, Joomla, TYPO3, or static (wipes docroot, requires `confirm`) |
+| `webspace_link_domain` | `webspace:manage` | Attach a user-owned domain and issue a Let's Encrypt cert |
+| `webspace_unlink_domain` | `webspace:manage` | Detach a linked domain and remove its vhost (requires `confirm`) |
+| `webspace_reset_db_password` | `webspace:manage` | Reset MariaDB password (returned once, requires `confirm`) |
+| `webspace_exec` | `webspace:manage` | Run a one-shot SSH command in the jailed shell |
+| `webspace_list_files` | `webspace:manage` | List directory contents via jailed SFTP |
+| `webspace_read_file` | `webspace:manage` | Read a file via jailed SFTP (max 10 MB) |
+| `webspace_write_file` | `webspace:manage` | Write a file via jailed SFTP (max 10 MB) |
+| `webspace_mkdir` | `webspace:manage` | Create a directory in the jail |
+| `webspace_rename` | `webspace:manage` | Rename / move within the jail |
+| `webspace_delete_path` | `webspace:manage` | Delete a file or directory in the jail (requires `confirm`) |
+| `webspace_chmod` | `webspace:manage` | Change permissions on a file/directory |
+| `webspace_add_ssh_key` | `webspace:manage` | Add an authorized SSH public key |
+| `webspace_delete_ssh_key` | `webspace:manage` | Remove an authorized SSH key by fingerprint (requires `confirm`) |
+
 ### Domains
 
 | Tool | Scope | Description |
@@ -162,8 +194,11 @@ API keys use granular scopes to control access:
 | `domains:read` | View domains and DNS records |
 | `domains:manage` | Edit DNS, nameservers, WHOIS, DNSSEC |
 | `domains:provision` | Register, transfer, cancel domains |
+| `webspace:read` | View webspaces, quotas, SSH connection info |
+| `webspace:manage` | Manage PHP, CMS, domains, files (SFTP/exec), SSH keys |
+| `webspace:provision` | Create, upgrade, delete webspaces |
 
-Keys can also be restricted to specific VPS or domain IDs for narrower access.
+Keys can also be restricted to specific VPS, webspace, or domain IDs for narrower access.
 
 ## Rate Limits
 
