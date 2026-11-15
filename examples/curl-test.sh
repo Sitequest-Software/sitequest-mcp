@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Test the Sitequest MCP server with curl
-# Replace YOUR_API_KEY with a real key from https://hosting.site.quest/en/dashboard/settings/api
+# Replace YOUR_API_KEY with a real key from https://site.quest/dashboard/api/
 
 API_KEY="YOUR_API_KEY"
-ENDPOINT="https://hosting.site.quest/mcp"
+ENDPOINT="https://site.quest/mcp"
 
 echo "=== Initialize ==="
 curl -s -X POST "$ENDPOINT" \

@@ -2,7 +2,7 @@
   "servers": {
     "sitequest": {
       "type": "http",
-      "url": "https://hosting.site.quest/mcp",
+      "url": "https://site.quest/mcp",
       "headers": {
         "Authorization": "Bearer ${input:sitequest-api-key}"
       }

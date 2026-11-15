@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "sitequest": {
-      "url": "https://hosting.site.quest/mcp",
+      "url": "https://site.quest/mcp",
       "headers": {
         "Authorization": "Bearer YOUR_API_KEY"
       }

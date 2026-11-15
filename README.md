@@ -16,7 +16,7 @@ A remote [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server
 
 ### 1. Get an API Key
 
-Create an API key in the [Sitequest Dashboard](https://hosting.site.quest/en/dashboard/settings/api) with the scopes you need.
+Create an API key in the [Sitequest Dashboard](https://site.quest/dashboard/api/) with the scopes you need.
 
 ### 2. Connect Your Client
 
@@ -27,7 +27,7 @@ Create an API key in the [Sitequest Dashboard](https://hosting.site.quest/en/das
   "servers": {
     "sitequest": {
       "type": "http",
-      "url": "https://hosting.site.quest/mcp",
+      "url": "https://site.quest/mcp",
       "headers": {
         "Authorization": "Bearer ${input:sitequest-api-key}"
       }
@@ -51,7 +51,7 @@ Create an API key in the [Sitequest Dashboard](https://hosting.site.quest/en/das
   "mcpServers": {
     "sitequest": {
       "type": "streamableHttp",
-      "url": "https://hosting.site.quest/mcp",
+      "url": "https://site.quest/mcp",
       "headers": {
         "Authorization": "Bearer YOUR_API_KEY"
       }
@@ -66,7 +66,7 @@ Create an API key in the [Sitequest Dashboard](https://hosting.site.quest/en/das
 {
   "mcpServers": {
     "sitequest": {
-      "url": "https://hosting.site.quest/mcp",
+      "url": "https://site.quest/mcp",
       "headers": {
         "Authorization": "Bearer YOUR_API_KEY"
       }
@@ -81,7 +81,7 @@ See [examples/](examples/) for more client configurations.
 
 | | |
 |---|---|
-| **URL** | `POST https://hosting.site.quest/mcp` |
+| **URL** | `POST https://site.quest/mcp` |
 | **Transport** | Streamable HTTP (stateless) |
 | **Protocol** | JSON-RPC 2.0 / MCP `2025-03-26` |
 | **Auth** | `Authorization: Bearer <api-key>` |
@@ -214,7 +214,7 @@ All destructive operations (reinstall OS, delete backups, register/cancel domain
 
 ## Documentation
 
-Full documentation: [site.quest/docs/api/mcp](https://hosting.site.quest/en/docs/api/mcp)
+Full documentation: [site.quest/docs/api/mcp](https://site.quest/en/docs/api/mcp)
 
 ## License
 
