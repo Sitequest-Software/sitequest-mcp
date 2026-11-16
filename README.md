@@ -71,7 +71,7 @@ The skill teaches Claude which product fits a task (webspace or VPS), which API 
 }
 ```
 
-**Cursor** -- Add to MCP settings:
+**Cursor / Windsurf** -- Add to MCP settings:
 
 ```json
 {
@@ -86,7 +86,17 @@ The skill teaches Claude which product fits a task (webspace or VPS), which API 
 }
 ```
 
-See [examples/](examples/) for more client configurations.
+**Test with curl** -- Replace `YOUR_API_KEY` with a key from the dashboard:
+
+```bash
+curl -s https://site.quest/mcp \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"vps_list","arguments":{}}}'
+```
+
+Use `"method":"tools/list"` (without `params`) to see the tools your key can call.
 
 ## Endpoint
 
