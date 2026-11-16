@@ -20,6 +20,17 @@ Create an API key in the [Sitequest Dashboard](https://site.quest/dashboard/api/
 
 ### 2. Connect Your Client
 
+**Claude Code (plugin, recommended)** -- One install sets up the MCP server and the `sitequest` skill:
+
+```bash
+claude plugin marketplace add Sitequest-Software/sitequest-mcp
+claude plugin install sitequest@sitequest
+```
+
+Or inside Claude Code: `/plugin marketplace add Sitequest-Software/sitequest-mcp`, then `/plugin install sitequest@sitequest`. Claude Code asks for your API key when the plugin is enabled and keeps it in secure storage.
+
+The skill teaches Claude which product fits a task (webspace or VPS), which API key scopes a job needs, and the workflows for websites with a CMS and your domain, services and game servers on a VPS, domains and DNS, and deploys from GitHub. See [`skills/sitequest/`](skills/sitequest/).
+
 **VS Code / GitHub Copilot** -- Create `.vscode/mcp.json` in your workspace:
 
 ```json

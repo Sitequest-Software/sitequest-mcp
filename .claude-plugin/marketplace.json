@@ -1,0 +1,15 @@
+{
+  "name": "sitequest",
+  "owner": {
+    "name": "Sitequest",
+    "url": "https://site.quest"
+  },
+  "description": "Sitequest's plugins for Claude Code: EU hosting for VPS, webspaces and domains.",
+  "plugins": [
+    {
+      "name": "sitequest",
+      "source": "./",
+      "description": "The Sitequest MCP server plus a skill with the workflows for webspaces, VPS, domains, DNS and GitHub deploys."
+    }
+  ]
+}

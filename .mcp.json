@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "sitequest": {
+      "type": "http",
+      "url": "https://site.quest/mcp",
+      "headers": {
+        "Authorization": "Bearer ${user_config.api_key}"
+      }
+    }
+  }
+}
