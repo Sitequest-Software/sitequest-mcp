@@ -115,7 +115,7 @@ The tools a client sees depend on the scopes of its API key. This list is checke
 
 | Tool | Description |
 |------|-------------|
-| `get_domain_pricing` | List available domain TLDs and their registration prices |
+| `get_domain_pricing` | Price list of all TLDs: registration and renewal (for availability use check_domain) |
 | `check_domain` | Check if a domain is available for registration |
 | `vps_get_pricing` | Get VPS component sell prices grouped by hostsystem |
 
@@ -221,6 +221,7 @@ Managed web hosting with isolated PHP/MariaDB sites. File and exec tools run as 
 | Tool | Scope | Description |
 |------|-------|-------------|
 | `get_order_status` | `vps:scale` or `webspace:scale` or `domains:provision` | Get the status of an order by its ID or token |
+| `list_orders` | `vps:scale` or `webspace:scale` or `domains:provision` | List the orders this key may read, newest first |
 
 ## Scopes
 
