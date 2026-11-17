@@ -28,7 +28,7 @@ Choose with the user:
   services or Docker; L and XL for databases next to the app and busy sites. Cores, RAM
   and NVMe can be raised later without reinstalling (`vps_upgrade`).
 
-Show the gross price, get confirmation, `vps_create`, then poll `get_order_status`.
+Show the gross price, get confirmation, `vps_create`, then poll `order_get`.
 
 ## 2. First look
 
@@ -50,7 +50,7 @@ included per IPv4 address.
 
 ## 5. Domain
 
-Point the domain at the server: `add_dns_record` with an A record to the IPv4 (and AAAA to
+Point the domain at the server: `dns_add_record` with an A record to the IPv4 (and AAAA to
 the IPv6). For mail sent from the server, set the PTR record in the dashboard (reverse DNS).
 
 ## 6. Backups

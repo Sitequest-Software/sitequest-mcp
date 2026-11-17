@@ -3,7 +3,7 @@
   "name": "quest.site/sitequest-hosting",
   "title": "Sitequest Hosting",
   "description": "VPS, webspaces, domains and DNS in EU datacenters, managed over MCP.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "websiteUrl": "https://site.quest/en/api-mcp/",
   "repository": {
     "url": "https://github.com/Sitequest-Software/sitequest-mcp",

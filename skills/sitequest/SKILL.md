@@ -22,15 +22,15 @@ not repeat them. It adds the product knowledge and the multi-step workflows.
 | A static site, SPA or the output of Astro, Hugo, Next export | Webspace (`STATIC`) | No server to maintain |
 | To try it out without paying | Free webspace (`webspace_claim_free`) | 1 GB, 1 database, Sitequest subdomain only, no own domain |
 | Docker, a Node/Python/Go app, a database, a VPN, a bot, a game server, Windows | VPS | Full root, any service |
-| Only a domain, DNS or email records | Domain | `check_domain`, `register_domain`, DNS tools |
+| Only a domain, DNS or email records | Domain | `domain_check`, `domain_register`, DNS tools |
 
 When in doubt for a website, start with a webspace: it is cheaper to run and needs no
 server administration. Move to a VPS when the user needs their own processes or ports.
 
 ## Prices and sizes
 
-Never quote prices from memory. Read them with `vps_get_pricing`, `get_domain_pricing` or
-`check_domain`, and show the gross amount before you ask for confirmation. VPS and webspaces
+Never quote prices from memory. Read them with `vps_get_pricing`, `domain_get_pricing` or
+`domain_check`, and show the gross amount before you ask for confirmation. VPS and webspaces
 come in ready-made sizes S, M, L, XL or as a custom configuration; resources can be raised
 later without reinstalling or moving.
 

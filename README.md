@@ -115,8 +115,8 @@ The tools a client sees depend on the scopes of its API key. This list is checke
 
 | Tool | Description |
 |------|-------------|
-| `get_domain_pricing` | Price list of all TLDs: registration and renewal (for availability use check_domain) |
-| `check_domain` | Check if a domain is available for registration |
+| `domain_get_pricing` | Price list of all TLDs: registration and renewal (availability: domain_check) |
+| `domain_check` | Check if a domain is available for registration |
 | `vps_get_pricing` | Get VPS component sell prices grouped by hostsystem |
 
 ### VPS
@@ -126,33 +126,29 @@ The tools a client sees depend on the scopes of its API key. This list is checke
 | `vps_list` | `vps:read` | List all VPS instances accessible to the authenticated API key |
 | `vps_get` | `vps:read` | Detailed VPS info: live status, configuration and subscription |
 | `vps_get_monitoring` | `vps:read` | Get monitoring data for a VPS: CPU, memory, and ping history over time, plus downtime incident statistics |
-| `vps_get_traffic` | `vps:read` | Get current-month bandwidth usage and daily traffic log for a VPS |
+| `vps_get_traffic` | `vps:read` | Network traffic this month: usage, limit, throttling and a daily log |
 | `vps_list_files` | `vps:files` | List directory contents on a VPS via SFTP |
 | `vps_read_file` | `vps:files` | Read a file on a VPS via SFTP |
 | `vps_power` | `vps:manage` | Execute a power action on a VPS: start, stop, or restart |
 | `vps_mount_iso` | `vps:manage` | Mount or unmount an ISO image on a VPS |
 | `vps_set_label` | `vps:manage` | Rename a VPS (changes the local display name only) |
 | `vps_get_ssh_security` | `vps:manage` | SSH security settings: password login, banner, key exchange, ciphers, OpenSSH version |
-| `vps_set_password_auth` | `vps:manage` | Turn SSH password authentication on or off |
-| `vps_set_ssh_banner` | `vps:manage` | Hide or show the Debian/Ubuntu pre-auth SSH banner |
-| `vps_set_post_quantum_kex` | `vps:manage` | Turn post-quantum key exchange on or off (OpenSSH 9.0+) |
-| `vps_set_legacy_ciphers` | `vps:manage` | Allow or block legacy CBC/3DES ciphers |
-| `vps_set_sha1_hmac` | `vps:manage` | Allow or block legacy hmac-sha1 MAC algorithms |
+| `vps_set_ssh_security` | `vps:manage` | Change SSH hardening: password login, banner, post-quantum key exchange, legacy ciphers and MACs |
 | `vps_update_openssh` | `vps:manage` | Run the OS package manager to install the latest OpenSSH on the VM (apt/dnf/zypper) |
 | `vps_rescue_password_auth` | `vps:manage` | Rescue: re-enable password login through the hypervisor when SSH is unreachable |
-| `vps_list_ssh_keys` | `vps:manage` | List all SSH keys on a VPS |
+| `vps_list_ssh_keys` | `vps:manage` | List the SSH keys Sitequest manages for logging in to a VPS, as added with vps_upload_ssh_key or vps_generate_ssh_key |
 | `vps_delete_ssh_key` | `vps:manage` | Delete an SSH key from a VPS |
-| `vps_mkdir` | `vps:manage` | Create a directory on a VPS via SSH |
+| `vps_mkdir` | `vps:manage` | Create a directory on a VPS over SFTP |
 | `vps_delete_path` | `vps:manage` | Delete a file or directory on a VPS via SSH |
 | `vps_list_backups` | `vps:manage` | List all backups for a VPS |
 | `vps_create_backup` | `vps:manage` | Create a new backup of a VPS |
 | `vps_restore_backup` | `vps:manage` | Restore a backup on a VPS |
-| `vps_delete_backup` | `vps:manage` | Delete a backup from a VPS |
-| `vps_get_firewall` | `vps:manage` | Get firewall status and rules for a VPS |
-| `vps_manage_firewall` | `vps:manage` | Add or remove a firewall rule, or enable/disable the firewall on a VPS |
+| `vps_delete_backup` | `vps:manage` | Delete a VPS backup for good and free its backup slot |
+| `vps_get_firewall` | `vps:manage` | Read the host firewall: tool, active state, default policies and rules |
+| `vps_manage_firewall` | `vps:manage` | Change a VPS's host firewall over SSH |
 | `vps_reset_password` | `vps:exec` | Generate a new root password (requires `confirm`) |
 | `vps_exec` | `vps:exec` | Execute a one-shot SSH command on a VPS and return { stdout, stderr, exitCode } |
-| `vps_generate_ssh_key` | `vps:exec` | Generate an SSH key pair on a VPS |
+| `vps_generate_ssh_key` | `vps:exec` | Have Sitequest generate a new SSH key pair for a VPS and add its public key to the VPS's managed keys |
 | `vps_upload_ssh_key` | `vps:exec` | Upload an existing SSH public key to a VPS |
 | `vps_write_file` | `vps:exec` | Write content to a file on a VPS via SFTP |
 | `vps_rename` | `vps:exec` | Rename or move a file/directory on a VPS via SSH |
@@ -172,7 +168,7 @@ Managed web hosting with isolated PHP/MariaDB sites. File and exec tools run as 
 | `webspace_list` | `webspace:read` | List all webspaces accessible by the API key |
 | `webspace_get` | `webspace:read` | Detailed webspace info: linked domains and live disk usage |
 | `webspace_get_ssh_info` | `webspace:read` | SSH connection details: host, port, username, host key fingerprint |
-| `webspace_list_files` | `webspace:files` | List directory contents inside a webspace's home (jailed) |
+| `webspace_list_files` | `webspace:files` | List a directory inside a webspace as its unprivileged site user, jailed to the home directory |
 | `webspace_read_file` | `webspace:files` | Read a file inside the webspace (jailed) |
 | `webspace_set_php` | `webspace:manage` | Change the PHP version: 8.2, 8.3, 8.4 or 8.5 (requires `confirm`) |
 | `webspace_set_label` | `webspace:manage` | Rename a webspace (changes the local display name only) |
@@ -180,48 +176,48 @@ Managed web hosting with isolated PHP/MariaDB sites. File and exec tools run as 
 | `webspace_link_domain` | `webspace:manage` | Link a domain from the account: DNS record, web server and Let's Encrypt certificate |
 | `webspace_unlink_domain` | `webspace:manage` | Unlink a domain from a webspace by the WebspaceDomain link ID |
 | `webspace_reset_db_password` | `webspace:manage` | Reset the MariaDB password for a webspace's database |
-| `webspace_mkdir` | `webspace:manage` | Create a directory inside a webspace (jailed) |
+| `webspace_mkdir` | `webspace:manage` | Create a directory inside a webspace as its unprivileged site user, jailed to the home directory |
 | `webspace_delete_path` | `webspace:manage` | Delete a file or directory inside a webspace (jailed) |
-| `webspace_list_ssh_keys` | `webspace:manage` | List SSH public keys installed in this webspace's authorized_keys |
+| `webspace_list_ssh_keys` | `webspace:manage` | List the SSH public keys in a webspace's ~/.ssh/authorized_keys, including the key the dashboard's web terminal uses |
 | `webspace_delete_ssh_key` | `webspace:manage` | Remove an SSH key from a webspace's authorized_keys by its fingerprint id |
 | `webspace_exec` | `webspace:exec` | Run a shell command as the webspace's unprivileged site user (jailed) |
-| `webspace_write_file` | `webspace:exec` | Write content to a file inside a webspace (jailed) |
-| `webspace_rename` | `webspace:exec` | Rename or move a file/directory inside a webspace (jailed) |
-| `webspace_chmod` | `webspace:exec` | Change permissions on a file/dir inside a webspace (jailed) |
-| `webspace_add_ssh_key` | `webspace:exec` | Add an SSH public key to this webspace's authorized_keys |
+| `webspace_write_file` | `webspace:exec` | Create or overwrite a file inside a webspace as its site user, jailed to the home directory |
+| `webspace_rename` | `webspace:exec` | Rename or move a file or directory inside a webspace as its site user, jailed to the home directory |
+| `webspace_chmod` | `webspace:exec` | Change the permission bits of one file or directory inside a webspace (not recursive), as its site user, jailed to the home directory |
+| `webspace_add_ssh_key` | `webspace:exec` | Add an SSH public key to a webspace's ~/.ssh/authorized_keys, so its owner can log in over SSH and SFTP as the site user |
 | `webspace_upgrade` | `webspace:scale` | Increase diskGb and/or databases on a paid webspace |
 | `webspace_cancel` | `webspace:cancel` | Cancel a webspace subscription at the end of the current billing period |
 | `webspace_uncancel` | `webspace:cancel` | Reactivate a cancelled webspace subscription before it expires |
 | `webspace_create` | `webspace:provision` | Create a paid webspace (charges the saved payment method) |
-| `webspace_claim_free` | `webspace:provision` | Claim the one-shot free-tier webspace for this user |
+| `webspace_claim_free` | `webspace:provision` | Claim the free webspace every account gets once: 1 GB storage, 1 database, 10 GB traffic, no own domain |
 | `webspace_delete` | `webspace:provision` | Delete a free webspace permanently |
 
 ### Domains
 
 | Tool | Scope | Description |
 |------|-------|-------------|
-| `list_domains` | `domains:read` | List all domains accessible to the authenticated API key |
-| `get_domain` | `domains:read` | Detailed domain info: DNS records, nameservers, registrar data, subscription |
-| `list_dns_records` | `domains:read` | List all DNS records for a domain |
-| `add_dns_record` | `domains:manage` | Add a DNS record to a domain |
-| `edit_dns_record` | `domains:manage` | Update the data of an existing DNS record |
-| `delete_dns_record` | `domains:manage` | Delete a DNS record (requires `confirm`) |
-| `set_nameservers` | `domains:manage` | Update nameservers for a domain |
-| `set_transfer_lock` | `domains:manage` | Enable or disable the transfer lock on a domain |
-| `set_whois_privacy` | `domains:manage` | Enable or disable WHOIS privacy protection on a domain |
-| `set_dnssec` | `domains:manage` | Enable or disable DNSSEC for a domain |
-| `get_authcode` | `domains:manage` | Get the auth code (transfer key) for a domain |
-| `cancel_domain` | `domains:cancel` | Cancel a domain subscription at the end of the current billing period |
-| `uncancel_domain` | `domains:cancel` | Reactivate a cancelled domain subscription before it expires |
-| `register_domain` | `domains:provision` | Register a new domain (charges the saved payment method, requires `confirm`) |
-| `transfer_domain` | `domains:provision` | Transfer a domain to Sitequest (auth code and `confirm` required) |
+| `domain_list` | `domains:read` | List all domains accessible to the authenticated API key |
+| `domain_get` | `domains:read` | Detailed domain info: DNS records, nameservers, registrar data, subscription |
+| `dns_list_records` | `domains:read` | List the DNS records of a domain's zone on Sitequest's nameservers: per record its recordId, type, name, value, TTL and priority |
+| `dns_add_record` | `domains:manage` | Add a DNS record to a domain's zone on Sitequest's nameservers |
+| `dns_edit_record` | `domains:manage` | Replace the value of one existing DNS record; its type, name and TTL stay |
+| `dns_delete_record` | `domains:manage` | Delete a DNS record (requires `confirm`) |
+| `domain_set_nameservers` | `domains:manage` | Replace all nameservers of a domain at the registry |
+| `domain_set_transfer_lock` | `domains:manage` | Lock or unlock a domain against transfers to another registrar |
+| `domain_set_whois_privacy` | `domains:manage` | Hide or show the owner's name, email and address in the public WHOIS and RDAP output of a domain; when hidden, a privacy contact is published instead |
+| `domain_set_dnssec` | `domains:manage` | Turn DNSSEC on or off for a domain |
+| `domain_get_authcode` | `domains:manage` | Get the auth code (transfer key) for a domain |
+| `domain_cancel` | `domains:cancel` | Cancel a domain subscription at the end of the current billing period |
+| `domain_uncancel` | `domains:cancel` | Reactivate a cancelled domain subscription before it expires |
+| `domain_register` | `domains:provision` | Register a new domain (charges the saved payment method, requires `confirm`) |
+| `domain_transfer` | `domains:provision` | Transfer a domain to Sitequest (auth code and `confirm` required) |
 
 ### Orders
 
 | Tool | Scope | Description |
 |------|-------|-------------|
-| `get_order_status` | `vps:scale` or `webspace:scale` or `domains:provision` | Get the status of an order by its ID or token |
-| `list_orders` | `vps:scale` or `webspace:scale` or `domains:provision` | List the orders this key may read, newest first |
+| `order_get` | `vps:scale` or `webspace:scale` or `domains:provision` | Get the status of an order by its ID or token |
+| `order_list` | `vps:scale` or `webspace:scale` or `domains:provision` | List this account's orders, newest first: new VPS, webspaces and domains, upgrades and transfers |
 
 ## Scopes
 

@@ -10,7 +10,7 @@ For WordPress, TYPO3, Joomla, Drupal or a static site. Ask once at the start: wh
   an own domain**; say so before you start if the user wants one.
 - New paid webspace: pick a size with the user (S is enough for a blog or company site,
   M for a shop or a media-heavy site), show the price, get confirmation, then
-  `webspace_create`. Poll `get_order_status` until the order is done.
+  `webspace_create`. Poll `order_get` until the order is done.
 
 ## 2. CMS
 
