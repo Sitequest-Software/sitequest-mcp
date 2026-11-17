@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "quest.site/sitequest-hosting",
   "title": "Sitequest Hosting",
-  "description": "VPS, webspaces, domains and DNS in EU datacenters, managed over MCP.",
+  "description": "VPS, webspaces, domains and DNS in EU datacenters. Sign in with OAuth or use an API key.",
   "version": "1.1.0",
   "websiteUrl": "https://site.quest/en/api-mcp/",
   "repository": {
@@ -23,14 +23,14 @@
       "headers": [
         {
           "name": "Authorization",
-          "description": "API key from the Sitequest dashboard (API / MCP), sent as a Bearer token.",
-          "isRequired": true,
+          "description": "Optional. API key from the Sitequest dashboard (API / MCP), sent as a Bearer token. Clients that support MCP authorization sign in with OAuth instead and need no key.",
+          "isRequired": false,
           "isSecret": true,
           "value": "Bearer {api_key}",
           "variables": {
             "api_key": {
               "description": "API key with the sq_live_ prefix. Its scopes decide which tools are listed.",
-              "isRequired": true,
+              "isRequired": false,
               "isSecret": true
             }
           }

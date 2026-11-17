@@ -10,9 +10,19 @@ A remote [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server
 - **Firewall & Backups** -- Configure firewall rules, create/restore/delete backups
 - **Domain Management** -- Register, transfer, configure DNS records, WHOIS privacy, DNSSEC
 - **Billing Integration** -- Provision resources with automatic payment via saved mandate
-- **Scope-Based Access** -- Fine-grained API key permissions per tool category
+- **Sign-in or API key** -- Claude and ChatGPT connect by signing in (OAuth 2.1); other clients use an API key
+- **Scope-Based Access** -- Fine-grained permissions per tool category, for API keys and connected apps alike
 
 ## Quickstart
+
+### Claude and ChatGPT: sign in
+
+No API key needed. Add `https://site.quest/mcp` as a custom connector, then sign in with your Sitequest account and choose what the app may do:
+
+- **Claude** -- Settings → Connectors → Add custom connector.
+- **ChatGPT** -- turn on Developer mode under Settings → Apps & Connectors → Advanced settings, then Create with authentication OAuth.
+
+You manage connected apps in the dashboard under API / MCP. Step-by-step guide: [Connect Claude or ChatGPT](https://site.quest/en/docs/api/mcp/).
 
 ### 1. Get an API Key
 
@@ -105,7 +115,7 @@ Use `"method":"tools/list"` (without `params`) to see the tools your key can cal
 | **URL** | `POST https://site.quest/mcp` |
 | **Transport** | Streamable HTTP (stateless) |
 | **Protocol** | JSON-RPC 2.0 / MCP `2025-03-26` |
-| **Auth** | `Authorization: Bearer <api-key>` |
+| **Auth** | OAuth 2.1 sign-in (discovery at `/.well-known/oauth-protected-resource/mcp`) or `Authorization: Bearer <api-key>` |
 
 ## Available Tools
 
