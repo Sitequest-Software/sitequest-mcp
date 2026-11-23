@@ -7,7 +7,7 @@ A remote [Model Context Protocol](https://modelcontextprotocol.io/) (MCP) server
 - **VPS Management** -- List, create, monitor, power control, OS reinstall, resize
 - **Webspace Hosting** -- Provision shared hosting, install a CMS (WordPress, Joomla, Drupal, TYPO3 or static), link domains, manage PHP versions and databases
 - **SSH & File Operations** -- Execute commands, read/write files, manage SSH security on both VPS and webspaces (jailed)
-- **Firewall & Backups** -- Configure firewall rules, create/restore/delete backups
+- **Firewall & Backups** -- Configure firewall rules, create/restore/delete backups of VPS and webspaces, automatic backups on a schedule
 - **Domain Management** -- Register, transfer, configure DNS records, WHOIS privacy, DNSSEC
 - **Billing Integration** -- Provision resources with automatic payment via saved mandate
 - **Sign-in or API key** -- Claude and ChatGPT connect by signing in (OAuth 2.1); other clients use an API key
@@ -137,6 +137,8 @@ The tools a client sees depend on the scopes of its API key. This list is checke
 | `vps_get` | `vps:read` | Detailed VPS info: live status, configuration and subscription |
 | `vps_get_monitoring` | `vps:read` | Get monitoring data for a VPS: CPU, memory, and ping history over time, plus downtime incident statistics |
 | `vps_get_traffic` | `vps:read` | Network traffic this month: usage, limit, throttling and a daily log |
+| `vps_list_backups` | `vps:read` | List all backups for a VPS |
+| `vps_get_backup_schedule` | `vps:read` | Automatic backups of a VPS: on or off, frequency, time, how many are kept, next and last run |
 | `vps_list_files` | `vps:files` | List directory contents on a VPS via SFTP |
 | `vps_read_file` | `vps:files` | Read a file on a VPS via SFTP |
 | `vps_power` | `vps:manage` | Execute a power action on a VPS: start, stop, or restart |
@@ -150,10 +152,10 @@ The tools a client sees depend on the scopes of its API key. This list is checke
 | `vps_delete_ssh_key` | `vps:manage` | Delete an SSH key from a VPS |
 | `vps_mkdir` | `vps:manage` | Create a directory on a VPS over SFTP |
 | `vps_delete_path` | `vps:manage` | Delete a file or directory on a VPS via SSH |
-| `vps_list_backups` | `vps:manage` | List all backups for a VPS |
 | `vps_create_backup` | `vps:manage` | Create a new backup of a VPS |
 | `vps_restore_backup` | `vps:manage` | Restore a backup on a VPS |
 | `vps_delete_backup` | `vps:manage` | Delete a VPS backup for good and free its backup slot |
+| `vps_set_backup_schedule` | `vps:manage` | Turn automatic backups on or off: daily or weekly, at which hour, how many are kept (requires `confirm`) |
 | `vps_get_firewall` | `vps:manage` | Read the host firewall: tool, active state, default policies and rules |
 | `vps_manage_firewall` | `vps:manage` | Change a VPS's host firewall over SSH |
 | `vps_reset_password` | `vps:exec` | Generate a new root password (requires `confirm`) |
@@ -178,6 +180,7 @@ Managed web hosting with isolated PHP/MariaDB sites. File and exec tools run as 
 | `webspace_list` | `webspace:read` | List all webspaces accessible by the API key |
 | `webspace_get` | `webspace:read` | Detailed webspace info: linked domains and live disk usage |
 | `webspace_get_ssh_info` | `webspace:read` | SSH connection details: host, port, username, host key fingerprint |
+| `webspace_list_backups` | `webspace:read` | List the backups of a webspace, newest first, with its backup slots and the schedule of its automatic backups |
 | `webspace_list_files` | `webspace:files` | List a directory inside a webspace as its unprivileged site user, jailed to the home directory |
 | `webspace_read_file` | `webspace:files` | Read a file inside the webspace (jailed) |
 | `webspace_set_php` | `webspace:manage` | Change the PHP version: 8.2, 8.3, 8.4 or 8.5 (requires `confirm`) |
@@ -190,6 +193,10 @@ Managed web hosting with isolated PHP/MariaDB sites. File and exec tools run as 
 | `webspace_delete_path` | `webspace:manage` | Delete a file or directory inside a webspace (jailed) |
 | `webspace_list_ssh_keys` | `webspace:manage` | List the SSH public keys in a webspace's ~/.ssh/authorized_keys, including the key the dashboard's web terminal uses |
 | `webspace_delete_ssh_key` | `webspace:manage` | Remove an SSH key from a webspace's authorized_keys by its fingerprint id |
+| `webspace_create_backup` | `webspace:manage` | Back up a webspace's files and databases to a separate backup server (requires `confirm`) |
+| `webspace_restore_backup` | `webspace:manage` | Restore a backup of a webspace: everything, files only or database only (requires `confirm`) |
+| `webspace_delete_backup` | `webspace:manage` | Delete a webspace backup for good and free its backup slot (requires `confirm`) |
+| `webspace_set_backup_schedule` | `webspace:manage` | Turn automatic backups on or off: daily or weekly, at which hour, how many are kept (requires `confirm`) |
 | `webspace_exec` | `webspace:exec` | Run a shell command as the webspace's unprivileged site user (jailed) |
 | `webspace_write_file` | `webspace:exec` | Create or overwrite a file inside a webspace as its site user, jailed to the home directory |
 | `webspace_rename` | `webspace:exec` | Rename or move a file or directory inside a webspace as its site user, jailed to the home directory |
@@ -235,9 +242,9 @@ Scopes follow `resource:action`. Resources: `vps`, `webspace`, `domains`.
 
 | Action | Allows | Includes |
 |--------|--------|----------|
-| `read` | List and view resources, status and metrics | |
+| `read` | List and view resources, status and metrics, backups and their schedule | |
 | `files` | List and read files (including any secrets in them) | `read` |
-| `manage` | Change settings: power, firewall, backups, PHP, CMS, DNS, linked domains | `read`, `files` |
+| `manage` | Change settings: power, firewall, PHP, CMS, DNS, linked domains; create, restore and delete backups and set their schedule | `read`, `files` |
 | `exec` | Run commands, write files, add SSH keys | `read`, `files` |
 | `scale` | Upgrade resources (charges the payment method) | `read` |
 | `cancel` | Cancel and reactivate subscriptions | `read` |
@@ -255,7 +262,7 @@ Domains support `read`, `manage`, `cancel` and `provision`. `exec` is never impl
 
 ## Safety
 
-All destructive operations (reinstall OS, delete backups, register/cancel domains, etc.) require an explicit `confirm: true` parameter. The server will not execute them without confirmation.
+All destructive operations (reinstall OS, restore or delete backups, register/cancel domains, etc.) require an explicit `confirm: true` parameter. The server will not execute them without confirmation.
 
 ## Documentation
 

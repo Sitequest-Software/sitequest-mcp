@@ -56,7 +56,12 @@ the IPv6). For mail sent from the server, set the PTR record in the dashboard (r
 ## 6. Backups
 
 Every VPS has two backup slots included: `vps_create_backup` once the service runs, and
-before every risky change.
+before every risky change. `vps_list_backups` shows what is there and whether a slot is free.
+
+For a server that runs in production, offer automatic backups: `vps_set_backup_schedule`,
+daily or weekly at an hour the user picks (`vps_get_backup_schedule` shows the current
+setting and how the last run went). `keep` is how many automatic backups stay; each fills
+a slot, so leave one free for backups taken by hand or add slots with `vps_upgrade`.
 
 ## 7. Done
 
