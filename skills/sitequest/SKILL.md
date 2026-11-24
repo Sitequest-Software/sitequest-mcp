@@ -43,12 +43,12 @@ commands or writing files always needs `exec` explicitly.
 
 | Job | Scopes |
 |---|---|
-| Look around, answer questions | `vps:read`, `webspace:read`, `domains:read` |
+| Look around, answer questions, list backups and their schedule | `vps:read`, `webspace:read`, `domains:read` |
 | New website with CMS and own domain | `webspace:provision`, `domains:provision` (new domain) or `domains:read` (existing) |
-| Change PHP, reinstall CMS, link domains | `webspace:manage` |
+| Change PHP, reinstall CMS, link domains, back up and restore a webspace | `webspace:manage` |
 | Edit files or run commands on a webspace | `webspace:exec` |
 | New VPS and set up a service | `vps:provision`, `vps:exec` |
-| Firewall, backups, power | `vps:manage` |
+| Firewall, power, back up and restore a VPS, automatic backups | `vps:manage` |
 | DNS records, nameservers, DNSSEC | `domains:manage` |
 | Upgrade a size | `vps:scale` or `webspace:scale` |
 
